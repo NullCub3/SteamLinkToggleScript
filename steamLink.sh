@@ -14,19 +14,16 @@ help() {
 }
 
 check_autostart() {
-	service="
-[Unit]
+	service="[Unit]
 Description=Steam Autostart Oneshot
-After=plasma-kwin_x11.service
+Requires=plasma-kwin_x11.service
 
 [Service]
 Type=oneshot
-RemainAfterExit=yes
 ExecStart=$HOME/.scripts/steamLink.sh -a
 
 [Install]
-WantedBy=default.target
-"
+WantedBy=default.target"
 	if [ ! "$service" = "$(cat $autostartServiceFile)" ]; then
 		# echo "$service"
 		echo "Updating service file..."
@@ -51,6 +48,7 @@ ask_reboot() {
 	esac
 	echo "Rebooting..."
 	sudo systemctl reboot
+	exit
 }
 
 autostart() {
